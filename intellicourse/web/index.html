@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>IntelliCourse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; }
+    textarea, input, button { width: 100%; padding: .75rem; margin: .5rem 0; }
+    pre { white-space: pre-wrap; background: #f6f6f6; padding: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>IntelliCourse</h1>
+  <p>Ask about courses or general topics.</p>
+  <textarea id="q" rows="4" placeholder="e.g., What are prerequisites for CS210?"></textarea>
+  <button id="go">Ask</button>
+  <h3>Answer</h3>
+  <pre id="ans"></pre>
+  <h4>Source tool</h4>
+  <pre id="tool"></pre>
+  <h4>Retrieved context (trimmed)</h4>
+  <pre id="ctx"></pre>
+
+  <script>
+    const go = document.getElementById('go');
+    go.onclick = async () => {
+      const query = document.getElementById('q').value.trim();
+      if (!query) return;
+      const res = await fetch('http://127.0.0.1:8000/chat', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ query })
+      });
+      const data = await res.json();
+      document.getElementById('ans').textContent = data.answer || '';
+      document.getElementById('tool').textContent = data.source_tool || '';
+      document.getElementById('ctx').textContent = JSON.stringify(data.retrieved_context, null, 2);
+    };
+  </script>
+</body>
+</html>

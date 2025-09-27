@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic>=2
+python-dotenv
+langchain
+langgraph
+langchain-google-genai
+sentence-transformers
+pinecone-client
+tavily-python
+requests
